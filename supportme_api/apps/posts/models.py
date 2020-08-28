@@ -18,7 +18,7 @@ class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.score
+        return str(self.score)
 
 
 class Comment(models.Model):

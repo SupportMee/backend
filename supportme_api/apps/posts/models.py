@@ -9,7 +9,7 @@ class Like(models.Model):
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
-        return self.hueca+":"+self.user
+        return str(self.user)+":"+str(self.hueca)
 
 
 class Rating(models.Model):
@@ -29,4 +29,4 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.hueca+":"+self.user
+        return str(self.user)+":"+str(self.hueca)

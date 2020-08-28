@@ -9,29 +9,29 @@ from .serializers import CitySerializer, CategorySerializer
 # response list of cities
 @api_view(['GET'])
 def cities(request):
-    tasks = City.objects.all().order_by('-name')
-    serializer = CitySerializer(tasks, many=True)
+    data = City.objects.all().order_by('-name')
+    serializer = CitySerializer(data, many=True)
     return Response(serializer.data)
 
 # response list of categories
 @api_view(['GET'])
 def categories(request):
-    tasks = Category.objects.all().order_by('-name')
-    serializer = CategorySerializer(tasks, many=True)
+    data = Category.objects.all().order_by('-name')
+    serializer = CategorySerializer(data, many=True)
     return Response(serializer.data)
 
 # response a single city
 @api_view(['GET'])
 def city(request, pk):
-    tasks = City.objects.get(id=pk)
-    serializer = CitySerializer(tasks, many=False)
+    data = City.objects.get(id=pk)
+    serializer = CitySerializer(data, many=False)
     return Response(serializer.data)
 
 # response a single category
 @api_view(['GET'])
 def category(request, pk):
-    tasks = Category.objects.get(id=pk)
-    serializer = CategorySerializer(tasks, many=False)
+    data = Category.objects.get(id=pk)
+    serializer = CategorySerializer(data, many=False)
     return Response(serializer.data)
 
 

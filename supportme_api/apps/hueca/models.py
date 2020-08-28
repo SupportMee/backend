@@ -4,19 +4,20 @@ from django.db import models
 
 from apps.classification.models import Category, City
 from apps.accounts.models import User
-# Create your models here.
 
+# Hueca, Menu, Image
 
 def get_upload_to(instance, filename):
     folder_name = 'huecas'
-    return os.path.join(folder_name, str(instance.id), filename)
+    #print(instance.hueca_id)
+    return os.path.join(folder_name, str(instance.hueca_id), filename)
 
 
 class Hueca(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     address = models.TextField(blank=True)
-    phone = models.PhoneNumberField(blank=True)
+    phone = models.CharField(max_length=15,blank=True)
     latitude = models.IntegerField()
     longitude = models.IntegerField()
     created_on = models.DateTimeField(auto_now_add=True)
@@ -40,8 +41,9 @@ class Menu(models.Model):
 
 class Image(models.Model):
     image = models.ImageField(
-        upload_to=get_upload_to, width_field='width', height_field='height')
+        upload_to=get_upload_to)
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)
-
+    
     def __str__(self):
-        return self.image
+        return str(self.image)
+    

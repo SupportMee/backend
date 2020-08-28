@@ -3,7 +3,7 @@ from django.db import models
 from apps.accounts.models import User
 from apps.hueca.models import Hueca
 
-# Create your models here.
+#Like, Rating, Comment
 
 class Like(models.Model):
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)

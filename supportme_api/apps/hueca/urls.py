@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-	#path('cities/', views.cities, name="cities-list"),
-	#path('categories/', views.categories, name="categories-list"),
+	path('huecas/', views.huecas, name="huecas-list"),
+	path('hueca/<int:pk>/', views.hueca, name="hueca-single"),
+	path('image/<int:hueca>/', views.image, name="image-hueca"),
 ]

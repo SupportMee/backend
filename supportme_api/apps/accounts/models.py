@@ -1,8 +1,6 @@
 
 from django.db import models
-from django.contrib.auth.hashers import make_password
 
-from django.contrib.auth.models import User as make_password
 # User
 
 class User(models.Model):
@@ -12,4 +10,4 @@ class User(models.Model):
     password = models.CharField(max_length=256)
 
     def __str__(self):
-        return self.name + " " + self.last_name
+        return self.first_name + " " + self.last_name

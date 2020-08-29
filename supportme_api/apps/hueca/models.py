@@ -12,6 +12,11 @@ def get_upload_to(instance, filename):
     #print(instance.hueca_id)
     return os.path.join(folder_name, str(instance.hueca_id), filename)
 
+def get_upload_to_menu(instance, filename):
+    folder_name = 'menus'
+    #print(instance.hueca_id)
+    return os.path.join(folder_name, str(instance.hueca_id), filename)
+
 
 class Hueca(models.Model):
     name = models.CharField(max_length=100)
@@ -33,8 +38,11 @@ class Hueca(models.Model):
 class Menu(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
+    description = models.TextField()
+    image = models.ImageField(
+        upload_to=get_upload_to_menu)
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)
-
+   
     def __str__(self):
         return self.name
 

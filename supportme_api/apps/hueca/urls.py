@@ -6,9 +6,11 @@ urlpatterns = [
 	path('hueca/<int:pk>/', views.hueca, name="hueca-single"),
 	path('hueca/', views.post_hueca, name="hueca-post"),
 
-    path('huecas/search/<str:search>/', views.huecas_search, name="huecas-search-list"),
+    path('huecas/search/<str:search>/',
+         views.huecas_search, name="huecas-search-list"),
 	path('huecas/cities/<int:city>/', views.huecas_city, name="huecas-city-list"),
-	path('huecas/categories/<int:category>/', views.huecas_category, name="huecas-category-list"),
+	path('huecas/categories/<int:category>/',
+	     views.huecas_category, name="huecas-category-list"),
 
 	path('images/<int:hueca>/', views.images, name="image-hueca-list"),
 	path('image/<int:pk>/', views.image, name="image-hueca"),
@@ -18,4 +20,5 @@ urlpatterns = [
 	path('menu/<int:pk>/', views.menu, name="menu-hueca"),
 	path('menu/', views.post_menu, name="menu-post"),
 
+	path('location/', views.huecas_location, name="huecas-near-location-list"),
 ]

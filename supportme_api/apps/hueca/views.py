@@ -9,6 +9,9 @@ from rest_framework import generics
 from .models import Hueca, Menu, Image
 from .serializers import HuecaSerializer, MenuSerializer, ImageSerializer
 
+#Calculate Distance
+from .distance_location import is_near
+
 #IMAGES
 # response  a single Image
 @api_view(['GET','DELETE'])
@@ -134,5 +137,24 @@ def huecas_search(request,search):
     return Response(serializer.data,status=status.HTTP_200_OK)
 
 
+# response list of huecas
+@api_view(['GET'])
+def huecas_location(request):
+    #current User Location
+    latitude=request.data["latitude"]
+    longitude=request.data["longitude"]
+    km = request.data["km"]
+    if(latitude==None or longitude==None or km==None):
+        return Response("No data avalible.", status=status.HTTP_400_BAD_REQUEST)
 
+    data = Hueca.objects.all()
+    #print(data)
+    listHuecas=[]
+    for hueca in data:
+        print(hueca.latitude)
+        if(is_near(latitude, longitude, hueca.latitude, hueca.longitude, km)):
+            serializer = HuecaSerializer(hueca, many=False)
+            listHuecas.append(serializer.data)
+
+    return Response(listHuecas, status=status.HTTP_200_OK)
 

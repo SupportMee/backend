@@ -73,21 +73,44 @@ def menus(request,hueca):
     return Response(serializer.data,status=status.HTTP_200_OK)
 
 
+#HUECA
 # response list of huecas
 @api_view(['GET'])
 def huecas(request):
     data = Hueca.objects.all()
     serializer = HuecaSerializer(data, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data,status=status.HTTP_200_OK)
 
-
+    
 # response  a single hueca
-@api_view(['GET'])
+@api_view(['GET','DELETE','PUT'])
 def hueca(request, pk):
-    data = Hueca.objects.get(id=pk)
-    serializer = HuecaSerializer(data, many=False)
-    return Response(serializer.data)
+    data = generics.get_object_or_404(Hueca,id=pk)
+    #data = Hueca.objects.get(id=pk)
+    if(request.method=='GET'):
+        serializer = HuecaSerializer(data, many=False)
+        return Response(serializer.data)
+    elif(request.method=='DELETE'):
+        data.delete()
+        return Response('Item succsesfully delete!',status=status.HTTP_200_OK)  
+    else:
+        serializer = HuecaSerializer(data, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+# response  of  huecas
+@api_view(['POST'])
+def post_hueca(request):
+        serializer = HuecaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+ 
+        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)  
 
 
 

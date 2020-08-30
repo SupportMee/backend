@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
 	path('huecas/', views.huecas, name="huecas-list"),
 	path('hueca/<int:pk>/', views.hueca, name="hueca-single"),
+	path('hueca/', views.post_hueca, name="hueca-post"),
 
 	path('images/<int:hueca>/', views.images, name="image-hueca-list"),
 	path('image/<int:pk>/', views.image, name="image-hueca"),

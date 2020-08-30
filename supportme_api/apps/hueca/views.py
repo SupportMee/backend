@@ -30,7 +30,7 @@ def post_image(request):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
 
-        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)  
+        return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)  
 
 
 # response list of images
@@ -63,7 +63,7 @@ def post_menu(request):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
 
-        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)  
+        return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)  
 
 # response list of menu
 @api_view(['GET'])
@@ -110,7 +110,7 @@ def post_hueca(request):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
  
-        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)  
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)  
 
 #FILTROS HUECAS
 @api_view(['GET'])

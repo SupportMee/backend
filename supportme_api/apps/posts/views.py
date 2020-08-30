@@ -39,7 +39,7 @@ def post_like(request):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
 
-        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
 
 #RATING SOLO SE PUEDE HACER POST Y GET
 # response list of scores
@@ -64,7 +64,7 @@ def post_rating(request):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
 
-        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
 
 
 #COMMENTS
@@ -90,5 +90,5 @@ def post_comment(request):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
 
-        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
 

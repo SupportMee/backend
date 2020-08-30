@@ -10,7 +10,6 @@ from .models import Hueca, Menu, Image
 from .serializers import HuecaSerializer, MenuSerializer, ImageSerializer
 
 #IMAGES
-
 # response  a single Image
 @api_view(['GET','DELETE'])
 def image(request, pk):
@@ -39,6 +38,38 @@ def post_image(request):
 def images(request,hueca):
     data = Image.objects.filter(hueca=hueca).all()
     serializer = ImageSerializer(data, many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+
+#MENU
+# response  a single menu
+@api_view(['GET','DELETE'])
+def menu(request, pk):
+    data = generics.get_object_or_404(Menu,id=pk)
+    #data = Image.objects.get(hueca=hueca)
+    if(request.method=='GET'):
+        serializer = MenuSerializer(data, many=False)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    else:
+        data.delete()
+        return Response('Item succsesfully delete!',status=status.HTTP_200_OK)  
+
+# response  of  menu
+@api_view(['POST'])
+def post_menu(request):
+        serializer = MenuSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+
+        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)  
+
+# response list of menu
+@api_view(['GET'])
+def menus(request,hueca):
+    data = Menu.objects.filter(hueca=hueca).all()
+    serializer = MenuSerializer(data, many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
 

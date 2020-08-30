@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import generics
 
 from .models import Like, Rating, Comment
 from .serializers import LikeSerializer, RatingSerializer, CommentSerializer
@@ -11,19 +13,32 @@ from apps.hueca.models import Hueca
 from django.contrib.auth.models import User
 
 # response list of likes
-
 @api_view(['GET'])
 def likes(request, hueca):
-    data = Like.objects.filter(hueca=hueca).all().count()
+    data = Like.objects.filter(hueca=hueca).all()
     serializer = LikeSerializer(data, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data,status=status.HTTP_200_OK)
 
 # response  of like
-@api_view(['GET'])
+@api_view(['GET','DELETE'])
 def like(request, hueca, user):
-    data = Like.objects.get(hueca=hueca,user=user)
-    serializer = LikeSerializer(data, many=False)
-    return Response(serializer.data)
+    #data = Like.objects.get(hueca=hueca,user=user)
+    data = generics.get_object_or_404(Like,hueca=hueca,user=user)
+    if(request.method=='GET'):
+        serializer = LikeSerializer(data, many=False)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    else:
+        data.delete()
+        return Response('Item succsesfully delete!',status=status.HTTP_200_OK)    
+
+# response  of like
+@api_view(['POST'])
+def post_like(request):
+        serializer = LikeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+    
+        return Response(serializer.data)
 
 
 # response list of scores

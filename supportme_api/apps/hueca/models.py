@@ -3,7 +3,7 @@ import os
 from django.db import models
 
 from apps.classification.models import Category, City
-from apps.accounts.models import User
+from django.contrib.auth.models import User
 
 # Hueca, Menu, Image
 

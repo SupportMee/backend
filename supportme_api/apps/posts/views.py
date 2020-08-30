@@ -8,7 +8,7 @@ from .serializers import LikeSerializer, RatingSerializer, CommentSerializer
 
 
 from apps.hueca.models import Hueca
-from apps.accounts.models import User
+from django.contrib.auth.models import User
 
 # response list of likes
 

@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.accounts.models import User
+from django.contrib.auth.models import User
 from apps.hueca.models import Hueca
 
 #Like, Rating, Comment

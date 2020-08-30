@@ -112,5 +112,27 @@ def post_hueca(request):
  
         return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)  
 
+#FILTROS HUECAS
+@api_view(['GET'])
+def huecas_city(request,city):
+    data = Hueca.objects.filter(city=city).all()
+    serializer = HuecaSerializer(data, many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def huecas_category(request,category):
+    data = Hueca.objects.filter(category=category).all()
+    serializer = HuecaSerializer(data, many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+    
+@api_view(['GET'])
+def huecas_search(request,search):
+    data = Hueca.objects.filter(name__startswith=search).all()
+    #data = Hueca.objects.filter(name=search).all()
+    serializer = HuecaSerializer(data, many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+
 
 

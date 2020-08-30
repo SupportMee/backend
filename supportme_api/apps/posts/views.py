@@ -41,7 +41,7 @@ def post_like(request):
 
         return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
 
-
+#RATING SOLO SE PUEDE HACER POST Y GET
 # response list of scores
 @api_view(['GET'])
 def ratings(request, hueca):
@@ -49,10 +49,46 @@ def ratings(request, hueca):
     serializer = RatingSerializer(data, many=True)
     return Response(serializer.data)
 
-
 # response  list of scores
 @api_view(['GET'])
 def rating(request, hueca, user):
     data = Rating.objects.get(hueca=hueca, user=user)
     serializer = RatingSerializer(data, many=False)
     return Response(serializer.data)
+
+# response  of scores
+@api_view(['POST'])
+def post_rating(request):
+        serializer = RatingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+
+        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+
+
+#COMMENTS
+# response list of comments
+@api_view(['GET'])
+def comments(request, hueca):
+    data = Comment.objects.filter(hueca=hueca).all().order_by('created_on')
+    serializer = CommentSerializer(data, many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+# response  of comments
+@api_view(['DELETE'])
+def comment(request,pk):
+    data = generics.get_object_or_404(Comment,id=pk)
+    data.delete()
+    return Response('Item succsesfully delete!',status=status.HTTP_200_OK)  
+
+# response  of comments
+@api_view(['POST'])
+def post_comment(request):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+
+        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+

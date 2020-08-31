@@ -8,6 +8,9 @@ from apps.hueca.models import Hueca
 class Like(models.Model):
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('hueca', 'user',)
+
     def __str__(self):
         return str(self.user)+":"+str(self.hueca)
 
@@ -16,6 +19,8 @@ class Rating(models.Model):
     score=models.IntegerField()
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('hueca', 'user',)
 
     def __str__(self):
         return str(self.score)

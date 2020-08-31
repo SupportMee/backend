@@ -7,6 +7,8 @@ from rest_framework import generics
 
 from .models import Like, Rating, Comment
 from .serializers import LikeSerializer, RatingSerializer, CommentSerializer
+from apps.hueca.models import Hueca
+from apps.hueca.serializers import HuecaSerializer
 
 
 from apps.hueca.models import Hueca
@@ -40,6 +42,21 @@ def post_like(request):
             return Response(serializer.data,status=status.HTTP_200_OK)
 
         return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
+
+# response hueca list of likes user
+@api_view(['GET'])
+def likes_user(request, user):
+    likesList = Like.objects.filter(user=user).all()
+    data=[]
+    huecaList = Hueca.objects.all()
+    for like in likesList:
+        for hueca in huecaList:
+            if like.hueca_id==hueca.id:
+                data.append(hueca)
+
+    serializer = HuecaSerializer(data, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 #RATING SOLO SE PUEDE HACER POST Y GET
 # response list of scores

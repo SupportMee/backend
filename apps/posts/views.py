@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
@@ -19,6 +18,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
 
 
+
+
 # response list of likes
 @api_view(['GET'])
 @authentication_classes([])
@@ -27,6 +28,8 @@ def likes(request, hueca):
     data = Like.objects.filter(hueca=hueca).all()
     serializer = LikeSerializer(data, many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
+
+
 
 # response  of like
 @api_view(['GET','DELETE'])
@@ -45,6 +48,8 @@ def like(request, hueca, user):
             }
         return Response(msg,status=status.HTTP_200_OK)    
 
+
+
 # response  of like
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
@@ -56,6 +61,8 @@ def post_like(request):
             return Response(serializer.data,status=status.HTTP_201_CREATED)
 
         return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
+
+
 
 # response hueca list of likes user
 @api_view(['GET'])
@@ -74,6 +81,8 @@ def likes_user(request, user):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
+
 #RATING SOLO SE PUEDE HACER POST Y GET
 # response list of scores
 @api_view(['GET'])
@@ -84,6 +93,8 @@ def ratings(request, hueca):
     serializer = RatingSerializer(data, many=True)
     return Response(serializer.data)
 
+
+
 # response  list of scores
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
@@ -92,6 +103,8 @@ def rating(request, hueca, user):
     data = Rating.objects.get(hueca=hueca, user=user)
     serializer = RatingSerializer(data, many=False)
     return Response(serializer.data)
+
+
 
 # response  of scores
 @api_view(['POST'])
@@ -106,6 +119,7 @@ def post_rating(request):
         return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
 
 
+
 #COMMENTS
 # response list of comments
 @api_view(['GET'])
@@ -115,6 +129,8 @@ def comments(request, hueca):
     data = Comment.objects.filter(hueca=hueca).all().order_by('created_on')
     serializer = CommentSerializer(data, many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
+
+
 
 # response  of comments
 @api_view(['DELETE'])
@@ -127,6 +143,8 @@ def comment(request,pk):
         'msg':'Item succsesfully delete!'
         }
     return Response(msg,status=status.HTTP_200_OK)  
+
+
 
 # response  of comments
 @api_view(['POST'])

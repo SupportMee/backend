@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
@@ -12,6 +11,7 @@ from rest_framework.decorators import api_view,authentication_classes,permission
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication,TokenAuthentication
 from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
 
+
 # response list of cities
 @api_view(['GET'])
 @authentication_classes([])
@@ -20,6 +20,8 @@ def cities(request):
     data = City.objects.all().order_by('name')
     serializer = CitySerializer(data, many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
+
+
 
 # response list of categories
 @api_view(['GET'])
@@ -30,6 +32,8 @@ def categories(request):
     serializer = CategorySerializer(data, many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
+
+
 # response a single city
 @api_view(['GET'])
 @authentication_classes([])
@@ -39,6 +43,8 @@ def city(request, pk):
     data=generics.get_object_or_404(City,id=pk)
     serializer = CitySerializer(data, many=False)
     return Response(serializer.data,status=status.HTTP_200_OK)
+
+
 
 # response a single category
 @api_view(['GET'])

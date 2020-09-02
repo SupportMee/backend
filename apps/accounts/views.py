@@ -41,6 +41,8 @@ def login(request):
     return Response(data, status=status.HTTP_200_OK)
     
 
+
+
 #registrer user
 @api_view(['POST'])
 @authentication_classes([])
@@ -61,6 +63,8 @@ def createUser(request):
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 
+
+
 #Get users
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
@@ -69,6 +73,8 @@ def users(request):
     data = User.objects.all()
     serializer = UserSerializer(data, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 
 @api_view(['DELETE'])
@@ -81,6 +87,8 @@ def logout(request,user):
         'msg':'Logout Successfully!'
     }
     return Response(msg,status=status.HTTP_200_OK)  
+
+
 
 
 @api_view(['DELETE'])

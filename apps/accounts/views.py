@@ -54,28 +54,3 @@ def users(request):
     data = User.objects.all()
     serializer = UserSerializer(data, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-'''
-@api_view(['POST'])
-def createUser(request):
-	serializer = UserSerializer(data=request.data)
-	if serializer.is_valid():
-		serializer.save()
-        serializertok = ObtainAuthToken.serializer_class(data=request.data, context={'request': request})
-        serializertok.is_valid(raise_exception=True)
-        user = serializertok.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-
-        data = {
-            'token': token.key,
-            'username': user.username,
-            'id': user.pk,
-            'email': user.email
-        }
-
-        return Response(data, status=status.HTTP_201_CREATED)
-
-    return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
-
-'''

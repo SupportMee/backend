@@ -2,6 +2,7 @@ from django.db import models
 
 from django.contrib.auth.models import User
 from apps.hueca.models import Hueca
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 #Like, Rating, Comment
 
@@ -16,7 +17,7 @@ class Like(models.Model):
 
 
 class Rating(models.Model):
-    score=models.IntegerField()
+    score=models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     class Meta:

@@ -8,8 +8,14 @@ from rest_framework import generics
 from .models import City, Category
 from .serializers import CitySerializer, CategorySerializer
 
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication,TokenAuthentication
+from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
+
 # response list of cities
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def cities(request):
     data = City.objects.all().order_by('name')
     serializer = CitySerializer(data, many=True)
@@ -17,6 +23,8 @@ def cities(request):
 
 # response list of categories
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def categories(request):
     data = Category.objects.all().order_by('name')
     serializer = CategorySerializer(data, many=True)
@@ -24,6 +32,8 @@ def categories(request):
 
 # response a single city
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def city(request, pk):
     #data = City.objects.get(id=pk)
     data=generics.get_object_or_404(City,id=pk)
@@ -32,6 +42,8 @@ def city(request, pk):
 
 # response a single category
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def category(request, pk):
     #data = Category.objects.get(id=pk)
     data=generics.get_object_or_404(Category,id=pk)

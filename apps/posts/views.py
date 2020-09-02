@@ -14,8 +14,15 @@ from apps.hueca.serializers import HuecaSerializer
 from apps.hueca.models import Hueca
 from django.contrib.auth.models import User
 
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication,TokenAuthentication
+from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
+
+
 # response list of likes
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def likes(request, hueca):
     data = Like.objects.filter(hueca=hueca).all()
     serializer = LikeSerializer(data, many=True)
@@ -23,6 +30,8 @@ def likes(request, hueca):
 
 # response  of like
 @api_view(['GET','DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def like(request, hueca, user):
     #data = Like.objects.get(hueca=hueca,user=user)
     data = generics.get_object_or_404(Like,hueca=hueca,user=user)
@@ -31,20 +40,27 @@ def like(request, hueca, user):
         return Response(serializer.data,status=status.HTTP_200_OK)
     else:
         data.delete()
-        return Response('Item succsesfully delete!',status=status.HTTP_200_OK)    
+        msg={
+        'msg':'Item succsesfully delete!'
+            }
+        return Response(msg,status=status.HTTP_200_OK)    
 
 # response  of like
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def post_like(request):
         serializer = LikeSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
 
         return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
 
 # response hueca list of likes user
 @api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def likes_user(request, user):
     likesList = Like.objects.filter(user=user).all()
     data=[]
@@ -61,6 +77,8 @@ def likes_user(request, user):
 #RATING SOLO SE PUEDE HACER POST Y GET
 # response list of scores
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def ratings(request, hueca):
     data = Rating.objects.filter(hueca=hueca).all()
     serializer = RatingSerializer(data, many=True)
@@ -68,6 +86,8 @@ def ratings(request, hueca):
 
 # response  list of scores
 @api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def rating(request, hueca, user):
     data = Rating.objects.get(hueca=hueca, user=user)
     serializer = RatingSerializer(data, many=False)
@@ -75,11 +95,13 @@ def rating(request, hueca, user):
 
 # response  of scores
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def post_rating(request):
         serializer = RatingSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
 
         return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
 
@@ -87,6 +109,8 @@ def post_rating(request):
 #COMMENTS
 # response list of comments
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def comments(request, hueca):
     data = Comment.objects.filter(hueca=hueca).all().order_by('created_on')
     serializer = CommentSerializer(data, many=True)
@@ -94,18 +118,25 @@ def comments(request, hueca):
 
 # response  of comments
 @api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def comment(request,pk):
     data = generics.get_object_or_404(Comment,id=pk)
     data.delete()
-    return Response('Item succsesfully delete!',status=status.HTTP_200_OK)  
+    msg={
+        'msg':'Item succsesfully delete!'
+        }
+    return Response(msg,status=status.HTTP_200_OK)  
 
 # response  of comments
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def post_comment(request):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
 
         return Response(serializer.erros,status=status.HTTP_400_BAD_REQUEST)
 

@@ -107,6 +107,16 @@ def updateUser(request,pk):
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
+#Get user
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def user(request,pk):
+    data  = generics.get_object_or_404(User,id=pk)
+    serializer = UserSerializer(data, many=False)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 
 #Get users

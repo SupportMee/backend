@@ -54,6 +54,14 @@ def createUser(request):
             'error':"User already exists."
         }
         return Response(msg,status=status.HTTP_400_BAD_REQUEST)
+    
+    emailExists=User.objects.filter(email=request.data["email"]).exists()
+    if(emailExists):
+        msg={
+            'error':"Email already exists."
+        }
+        return Response(msg,status=status.HTTP_400_BAD_REQUEST)
+
     request.data["password"] = make_password(request.data["password"])
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
@@ -61,7 +69,43 @@ def createUser(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+
+
+ #update user
+@api_view(['PUT'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updateUser(request,pk):
+    userExists=User.objects.filter(username=request.data["username"]).exists()
+    data = generics.get_object_or_404(User,id=pk)
+
+    if(data.username!=request.data["username"] and userExists):
+        msg={
+            'error':"User already exists."
+        }
+        return Response(msg,status=status.HTTP_400_BAD_REQUEST)
+
+    emailExists=User.objects.filter(email=request.data["email"]).exists()
+    if(data.email!=request.data["email"] and emailExists):
+        msg={
+            'error':"Email already exists."
+        }
+        return Response(msg,status=status.HTTP_400_BAD_REQUEST)
+
+    if(request.data["password"]!=""):
+        request.data["password"] = make_password(request.data["password"])
+    else:
+        request.data["password"] = data.password
+        
+    serializer = UserSerializer(data,data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -80,8 +124,8 @@ def users(request):
 @api_view(['DELETE'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def logout(request,user):
-    data = generics.get_object_or_404(Token,user=user)
+def logout(request,pk):
+    data = generics.get_object_or_404(Token,user=pk)
     data.delete()
     msg={
         'msg':'Logout Successfully!'
@@ -94,8 +138,8 @@ def logout(request,user):
 @api_view(['DELETE'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def delete_account(request,user):
-    data = generics.get_object_or_404(User,user=user)
+def deleteAccount(request,pk):
+    data = generics.get_object_or_404(User,id=pk)
     data.delete()
     msg={
         'msg':'Delete Account Successfully!'

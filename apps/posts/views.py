@@ -95,7 +95,7 @@ def ratings(request, hueca):
 
 
 
-# response  list of scores
+# response  single user score of Hueca
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
 @permission_classes([IsAuthenticated])

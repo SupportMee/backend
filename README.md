@@ -7,15 +7,15 @@
 ## Install VirtualEnv
 
 ```
-pip install pipenv
+virtualenv env
 ```
 
-## Init VirtualEnv
+## Activate VirtualEnv
 ```
-pipenv install
+.\env\Scripts\activate
 ```
 
-## Start VirtualEnv
+## Install Requirements VirtualEnv
 ```
-pipenv shell
+pip install -r requirements.txt
 ```

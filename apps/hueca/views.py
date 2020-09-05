@@ -15,23 +15,36 @@ from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
 #Calculate Distance
 from .distance_location import is_near
 
+#from rest_framework.views import APIView
+#from rest_framework.viewsets import ViewSet, ModelViewSet
+
+
+
 #IMAGES
 # response  a single Image
 @api_view(['GET','DELETE'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def image(request, pk):
-    data = generics.get_object_or_404(Image,id=pk)
+    
     #data = Image.objects.get(hueca=hueca)
-    if(request.method=='GET'):
-        serializer = ImageSerializer(data, many=False)
-        return Response(serializer.data,status=status.HTTP_200_OK)
-    else:
+    if(request.method=='DELETE' and request.user.is_authenticated):
+        data = generics.get_object_or_404(Image,id=pk)
         data.delete()
         msg={
         'msg':'Item succsesfully delete!'
             }
-        return Response(msg,status=status.HTTP_200_OK)  
+        return Response(msg,status=status.HTTP_200_OK) 
+
+    elif(request.method=='GET'):
+        data = generics.get_object_or_404(Image,id=pk)
+        serializer = ImageSerializer(data, many=False)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    msg={
+        'error':'Permission Denied!'
+            }
+    return Response(msg,status=status.HTTP_403_FORBIDDEN)
+
 
 
 # response  of  image
@@ -64,19 +77,23 @@ def images(request,hueca):
 # response  a single menu
 @api_view(['GET','DELETE'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def menu(request, pk):
     data = generics.get_object_or_404(Menu,id=pk)
     #data = Image.objects.get(hueca=hueca)
     if(request.method=='GET'):
         serializer = MenuSerializer(data, many=False)
         return Response(serializer.data,status=status.HTTP_200_OK)
-    else:
+    elif(request.method=='DELETE' and request.user.is_authenticated):
         data.delete()
         msg={
         'msg':'Item succsesfully delete!'
             }
-        return Response(msg,status=status.HTTP_200_OK)  
+        return Response(msg,status=status.HTTP_200_OK)
+    msg={
+        'error':'Permission Denied!'
+            }
+    return Response(msg,status=status.HTTP_403_FORBIDDEN)
 
 
 
@@ -122,25 +139,29 @@ def huecas(request):
 # response  a single hueca
 @api_view(['GET','DELETE','PUT'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def hueca(request, pk):
     data = generics.get_object_or_404(Hueca,id=pk)
     #data = Hueca.objects.get(id=pk)
     if(request.method=='GET'):
         serializer = HuecaSerializer(data, many=False)
         return Response(serializer.data)
-    elif(request.method=='DELETE'):
+    elif(request.method=='DELETE' and request.user.is_authenticated):
         data.delete()
         msg={
         'msg':'Item succsesfully delete!'
             }
         return Response(msg,status=status.HTTP_200_OK)  
-    else:
+    elif(request.method=='PUT' and request.user.is_authenticated):
         serializer = HuecaSerializer(data, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    msg={
+        'error':'Permission Denied!'
+            }
+    return Response(msg,status=status.HTTP_403_FORBIDDEN)
 
 
 
@@ -197,23 +218,25 @@ def huecas_search(request,search):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
-def huecas_location(request):
+def huecas_location(request,latitude,longitude,km):
     #current User Location
-    latitude=request.data["latitude"]
-    longitude=request.data["longitude"]
-    km = request.data["km"]
-    if(latitude==None or longitude==None or km==None):
+    try:
+        latitude=float(latitude)
+        longitude=float(longitude)
+        km = float(km)
+    except ValueError:
         msg={
         'msg':'No data avalible.!'
             }
-        
         return Response(msg, status=status.HTTP_400_BAD_REQUEST)
+    #print("latitude: "+str(latitude))
+    #print("longitude: "+str(longitude))
+    #print("km: "+str(km))
 
     data = Hueca.objects.all()
     #print(data)
     listHuecas=[]
     for hueca in data:
-        print(hueca.latitude)
         if(is_near(latitude, longitude, hueca.latitude, hueca.longitude, km)):
             serializer = HuecaSerializer(hueca, many=False)
             listHuecas.append(serializer.data)

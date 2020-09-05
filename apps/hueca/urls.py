@@ -20,5 +20,5 @@ urlpatterns = [
 	path('menu/<int:pk>', views.menu, name="menu-hueca"),
 	path('menu', views.post_menu, name="menu-post"),
 
-	path('location', views.huecas_location, name="huecas-near-location-list"),
+	path('location/<str:latitude>/<str:longitude>/<str:km>', views.huecas_location, name="huecas-near-location-list"),
 ]

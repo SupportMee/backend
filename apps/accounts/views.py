@@ -20,6 +20,19 @@ from .serializers import UserSerializer
 # response list of likes
 
 
+
+#Get if User have active Token
+#Unique Token for User
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def isActiveToken(request,user):
+    active=Token.objects.filter(user=user).exists()
+    data = {'active': active}
+    return Response(data, status=status.HTTP_200_OK)
+
+
+
 #login get token
 @api_view(['POST'])
 @authentication_classes([])

@@ -10,4 +10,6 @@ urlpatterns = [
 	path('delete/<int:pk>', views.deleteAccount, name="delete-account-user"),
 	path('update/<int:pk>', views.updateUser, name="update-account-user"),
 
+	path('active/<int:user>', views.isActiveToken, name="active-user-token"),
+
 ]

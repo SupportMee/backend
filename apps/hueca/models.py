@@ -44,7 +44,7 @@ class Menu(models.Model):
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)
    
     def __str__(self):
-        return self.name
+        return str(self.hueca)+" : "+self.name
 
 
 class Image(models.Model):
@@ -53,5 +53,5 @@ class Image(models.Model):
     hueca = models.ForeignKey(Hueca, on_delete=models.CASCADE)
     
     def __str__(self):
-        return str(self.image)
+        return str(self.hueca)+" : "+str(self.image)
     

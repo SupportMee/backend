@@ -13,7 +13,7 @@ class Like(models.Model):
         unique_together = ('hueca', 'user',)
 
     def __str__(self):
-        return str(self.user)+":"+str(self.hueca)
+        return str(self.user)+" : "+str(self.hueca)
 
 
 class Rating(models.Model):
@@ -24,7 +24,7 @@ class Rating(models.Model):
         unique_together = ('hueca', 'user',)
 
     def __str__(self):
-        return str(self.score)
+        return str(self.user)+" : "+str(self.hueca)+" : "+str(self.score)
 
 
 class Comment(models.Model):

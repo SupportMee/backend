@@ -91,18 +91,31 @@ def likes_user(request, user):
 def ratings(request, hueca):
     data = Rating.objects.filter(hueca=hueca).all()
     serializer = RatingSerializer(data, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data,status=status.HTTP_200_OK)
 
 
 
 # response  single user score of Hueca
-@api_view(['GET'])
+@api_view(['GET','PUT'])
 @authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def rating(request, hueca, user):
-    data = Rating.objects.get(hueca=hueca, user=user)
-    serializer = RatingSerializer(data, many=False)
-    return Response(serializer.data)
+    data = generics.get_object_or_404(Rating,hueca=hueca, user=user)
+    if(request.method=='GET'):
+        serializer = RatingSerializer(data, many=False)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    elif(request.method=='PUT'):
+        serializer = RatingSerializer(data, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    msg={
+        'error':'Permission Denied!'
+            }
+    return Response(msg,status=status.HTTP_403_FORBIDDEN)
 
 
 

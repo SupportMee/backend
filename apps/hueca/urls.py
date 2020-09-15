@@ -5,6 +5,8 @@ urlpatterns = [
 	path('huecas', views.huecas, name="huecas-list"),
 	path('hueca/<int:pk>', views.hueca, name="hueca-single"),
 	path('hueca', views.post_hueca, name="hueca-post"),
+	
+	path('huecas/<int:user>', views.huecas_user, name="user-huecas-list"),
 
     path('huecas/search/<str:search>',
          views.huecas_search, name="huecas-search-list"),

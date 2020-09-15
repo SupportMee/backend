@@ -243,3 +243,12 @@ def huecas_location(request,latitude,longitude,km):
 
     return Response(listHuecas, status=status.HTTP_200_OK)
 
+
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication,TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def huecas_user(request,user):
+    data = Hueca.objects.filter(user=user).all()
+    serializer = HuecaSerializer(data, many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
